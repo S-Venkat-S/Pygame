@@ -1,6 +1,6 @@
 import pygame
-import sys
-sys.path.insert(0, "F:\\Pygame")
+import sys, os
+sys.path.insert(0, os.path.split(os.getcwd())[0])
 from common.colors import Colors;
 pygame.init()
 screen_width = 360
