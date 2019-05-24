@@ -30,7 +30,6 @@ class Bullets:
                 to_be_removed.append(i)
             else:
                 self.bullets[i] = (bullet[0], bullet[1] - self.velocity)
-            print len(self.bullets)
         for i in to_be_removed:
             del self.bullets[i]
             

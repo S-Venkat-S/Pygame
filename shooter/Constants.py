@@ -8,3 +8,5 @@ class Constants():
     player_height = 30
     bullet_width = 7
     bullet_height = 12
+    enemy_width = 20
+    enemy_height = 20
