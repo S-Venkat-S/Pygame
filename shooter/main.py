@@ -1,11 +1,10 @@
 import pygame, sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),".."))
-from Player import Player;
-from Constants import Constants;
-from common.colors import Colors;
+from Player import Player
+from Constants import Constants
 pygame.init()
-screen_width = Constants.screen_width;
-screen_height = Constants.screen_height;
+screen_width = Constants.screen_width  # type: int
+screen_height = Constants.screen_height
 FPS = Constants.FPS
 main_screen = pygame.display.set_mode([screen_width,screen_height])
 

@@ -2,7 +2,7 @@ class Constants():
     
     screen_width = 360
     screen_height = 480
-    FPS = 30
+    FPS = 30  # type: int
     game_name = "Space Shooter"
     player_width = 50
     player_height = 30
