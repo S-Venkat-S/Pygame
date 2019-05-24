@@ -1,5 +1,5 @@
 import pygame, sys, os
-sys.path.insert(0, os.path.split(os.getcwd())[0])
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),".."))
 from Player import Player;
 from Constants import Constants;
 from common.colors import Colors;
