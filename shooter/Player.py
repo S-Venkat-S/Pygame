@@ -12,7 +12,7 @@ class Player:
 
     def __init__(self, surface):
         self.surface = surface
-        self.bullets = Bullets(surface, 10, 0.2)
+        self.bullets = Bullets(surface, 5, 0.2)
         self.enemy = Enemy(3, surface)
         self.player_img = pygame.image.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "plane.png"))
         self.player_img = pygame.transform.scale(self.player_img, (Constants.player_width, Constants.player_height))
@@ -22,7 +22,7 @@ class Player:
         self.update_move()
         self.surface.fill((255, 255, 255))
         self.bullets.update(self.position)
-        self.enemy.update(self.bullets.bullets)
+        self.enemy.update(self.bullets)
         self.surface.blit(self.player_img, self.position, area=None, special_flags=0)
 #         self.surface.fill((255, 255, 255))
 

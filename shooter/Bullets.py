@@ -20,7 +20,11 @@ class Bullets:
         positions = self.calculate_bullets_position(position)
         for i in positions:
             self.bullets.append(i)
-    
+
+    def remove_bullet(self, to_be_destroyed):
+        for i in to_be_destroyed:
+            self.bullets.remove(i)
+
     def draw(self):
         to_be_removed = []
         for i in range(len(self.bullets)):

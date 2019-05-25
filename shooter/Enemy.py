@@ -8,7 +8,7 @@ import random
 
 class Enemy:
 
-    def __init__(self, velocity, surface, frequency=0.7):
+    def __init__(self, velocity, surface, frequency=0.3):
         self.velocity = velocity
         self.surface = surface
         self.last_spawned = 0
@@ -19,6 +19,8 @@ class Enemy:
         self.enemy_img = pygame.transform.scale(self.enemy_img, (Constants.enemy_width, Constants.enemy_height))
         self.blast_img = pygame.image.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "blast.png"))
         self.blast_img = pygame.transform.scale(self.blast_img, (Constants.enemy_width, Constants.enemy_height))
+        self.dead_sound = pygame.mixer.Sound(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "blast.wav"))
+        self.dead_sound.set_volume(0.3)
 
     def add_enemy(self):
         x = random.randint(0, self.max_spawn_x)
@@ -36,27 +38,36 @@ class Enemy:
                     self.enemies[i] = (enemy[0], enemy[1] + self.velocity)
             else:
                 self.surface.blit(self.blast_img, enemy)
+                self.dead_sound.play()
                 to_be_removed.append(i)
+        to_be_removed = list(dict.fromkeys(to_be_removed))
+        to_be_removed.sort()
+        to_be_removed.reverse()
         for i in to_be_removed:
-            del self.enemies[i]
+            try:
+                del self.enemies[i]
+            except IndexError:
+                print self.enemies, i
 
     def update(self, bullets):
-        to_be_destroyed = []
+        enemy_to_be_destroyed = []
+        bullet_to_be_destroyed = []
         for enemy in self.enemies:
             x1 = enemy[0]
             y1 = enemy[1]
             w1 = Constants.enemy_width
             h1 = Constants.enemy_height
-            for bullet in bullets:
+            for bullet in bullets.bullets:
                 x2 = bullet[0]
                 y2 = bullet[1]
                 w2 = Constants.bullet_width
                 h2 = Constants.enemy_height
                 if Utils.is_collide(x1, y1, w1, h1, x2, y2, w2, h2):
-                    print (x1, y1, w1, h1, x2, y2, w2, h2)
-                    to_be_destroyed.append(enemy)
+                    enemy_to_be_destroyed.append(enemy)
+                    bullet_to_be_destroyed.append(bullet)
         if time.time() - self.last_spawned >= self.frequency:
             self.add_enemy()
             self.last_spawned = time.time()
-        self.draw(to_be_destroyed)
+        bullets.remove_bullet(bullet_to_be_destroyed)
+        self.draw(enemy_to_be_destroyed)
 
