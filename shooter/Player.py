@@ -2,7 +2,7 @@ from Constants import Constants
 from common.Constants import Constants as C
 from Bullets import Bullets
 import pygame
-import os
+from common.Utils import Utils
 from Enemy import Enemy
 
 
@@ -14,7 +14,7 @@ class Player:
         self.surface = surface
         self.bullets = Bullets(surface, 5, 0.2)
         self.enemy = Enemy(3, surface)
-        self.player_img = pygame.image.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "plane.png"))
+        self.player_img = Utils.load_image("shooter", "gauntlet.png")
         self.player_img = pygame.transform.scale(self.player_img, (Constants.player_width, Constants.player_height))
         self.position = ((surface.get_width()/2) - (Constants.player_width/2), surface.get_height() - (Constants.player_height + 10))
 

@@ -10,14 +10,17 @@ class Enemy:
 
     def __init__(self, velocity, surface, frequency=0.3):
         self.velocity = velocity
+        self.enemies_images = []
         self.surface = surface
         self.last_spawned = 0
         self.frequency = frequency
-        self.enemies = [(160, 0)]
+        self.enemies = []
+        self.enemies_imgs = []
         self.max_spawn_x = self.surface.get_width() - Constants.enemy_width
-        self.enemy_img = pygame.image.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "enemy_1.png"))
-        self.enemy_img = pygame.transform.scale(self.enemy_img, (Constants.enemy_width, Constants.enemy_height))
-        self.blast_img = pygame.image.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "blast.png"))
+        for enemy in Constants.enemies:
+            i = Utils.load_image("shooter", enemy)
+            self.enemies_images.append(pygame.transform.scale(i, (Constants.enemy_width, Constants.enemy_height)))
+        self.blast_img = Utils.load_image("shooter", "blast.png")
         self.blast_img = pygame.transform.scale(self.blast_img, (Constants.enemy_width, Constants.enemy_height))
         self.dead_sound = pygame.mixer.Sound(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "blast.wav"))
         self.dead_sound.set_volume(0.3)
@@ -25,13 +28,19 @@ class Enemy:
     def add_enemy(self):
         x = random.randint(0, self.max_spawn_x)
         self.enemies.append((x, 0))
+        self.enemies_imgs.append(self.get_random_enemy())
+
+    def get_random_enemy(self):
+        rand = random.randint(0, 3)
+        return self.enemies_images[rand]
 
     def draw(self, to_be_destroyed):
         to_be_removed = []
         for i in range(len(self.enemies)):
             enemy = self.enemies[i]
+            enemy_img = self.enemies_imgs[i]
             if enemy not in to_be_destroyed:
-                self.surface.blit(self.enemy_img, enemy)
+                self.surface.blit(enemy_img, enemy)
                 if enemy[1] + self.velocity > self.surface.get_height():
                     to_be_removed.append(i)
                 else:
@@ -46,6 +55,7 @@ class Enemy:
         for i in to_be_removed:
             try:
                 del self.enemies[i]
+                del self.enemies_imgs[i]
             except IndexError:
                 print self.enemies, i
 

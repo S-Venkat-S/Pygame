@@ -1,6 +1,6 @@
 import pygame
-import os
 import time
+from common.Utils import Utils
 from Constants import Constants
 
 
@@ -12,7 +12,7 @@ class Bullets:
         self.frequency = frequency
         self.last_fired = time.time()
         self.bullets = []
-        self.bullet_img = pygame.image.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "shooter", "bullet.png"))
+        self.bullet_img = Utils.load_image("shooter", "bullet.png")
         self.bullet_img = pygame.transform.scale(self.bullet_img, (Constants.bullet_width, Constants.bullet_height))
     
     # position = Position of the plane

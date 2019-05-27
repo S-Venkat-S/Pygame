@@ -1,3 +1,5 @@
+import os
+import pygame
 
 
 class Utils:
@@ -18,3 +20,8 @@ class Utils:
         elif not recur:
             return Utils.is_collide(x2, y2, w2, h2, x1, y1, w1, h1, True)
         return False
+
+    @staticmethod
+    def load_image(*path):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        return pygame.image.load(os.path.join(current_dir, "..", "assets", *path))
