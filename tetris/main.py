@@ -22,6 +22,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYUP:
+            game.key_event(event)
     game.update()
     main_screen.blit(play_screen, (0, 0))
     pygame.display.update()
