@@ -1,12 +1,15 @@
-import pygame, random
+import pygame
+import time
 from common.Utils import Utils
 from Constants import Constants
-from common.Constants import Constants as C
+from common.Constants import Constants as Cons
 
 
 class Game:
 
-    tetri_i = [(0, 3), (0, 4), (0, 5), (0, 6)]  # (y, x) representation
+    tetri_i = [(-1, 3), (-1, 4), (-1, 5), (-1, 6)]  # (y, x) representation
+    speed = 0.10
+    old_time = 0
 
     game_data = {
         "game_grid": [],
@@ -45,25 +48,31 @@ class Game:
         pass
 
     def move_down(self):
+        no_fill = []
+        fill = []
         for i in range(len(self.game_data["current_tetri"])):
             cur_vec = self.game_data["current_tetri"][i]
-            if (cur_vec[0] + 1) < self.grid_h:
-                self.game_data["game_grid"][cur_vec[0]][cur_vec[1]] = 0
+            if (cur_vec[0] + 1) < self.grid_h and not self.check_cell(cur_vec[0] + 1, cur_vec[1]):
+                no_fill.append(cur_vec)
                 cur_vec = (cur_vec[0] + 1, cur_vec[1])
-                self.game_data["current_tetri"][i] = cur_vec
-                self.game_data["game_grid"][cur_vec[0]][cur_vec[1]] = 1
+                fill.append(cur_vec)
             else:
-                return
-        pass
+                return False
+        for i in range(len(fill)):
+            self.game_data["current_tetri"][i] = fill[i]
+            self.game_data["game_grid"][fill[i][0]][fill[i][1]] = 1
+            if no_fill[i][0] >= 0:
+                self.game_data["game_grid"][no_fill[i][0]][no_fill[i][1]] = 0
+        return True
 
     def key_event(self, event):
-        if event.scancode == C.key_code_up:
+        if event.scancode == Cons.key_code_up:
             pass
-        if event.scancode == C.key_code_left:
+        if event.scancode == Cons.key_code_left:
             self.move_left()
-        if event.scancode == C.key_code_right:
+        if event.scancode == Cons.key_code_right:
             self.move_right()
-        if event.scancode == C.key_code_down:
+        if event.scancode == Cons.key_code_down:
             self.move_down()
         pass
         return
@@ -77,7 +86,7 @@ class Game:
                     res = 1
                 current_row.append(res)
             self.game_data["game_grid"].append(current_row)
-        self.game_data["game_grid"][0][2] = 1
+        # self.game_data["game_grid"][3][5] = 1
         return True
 
     def __init__(self, surface, mock=False):
@@ -111,6 +120,11 @@ class Game:
 
     def update(self):
         # self.update_state()
+        c_time = time.time()
+        if (c_time - self.old_time) > self.speed:
+            self.old_time = c_time
+            if not self.move_down():
+                self.game_data["current_tetri"] = list(self.tetri_i)
         self.update_ui_state()
         # self.surface.blit(self.background, (0, 0))
 
