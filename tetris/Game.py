@@ -16,16 +16,60 @@ class Game:
     tetri_s = [(-1, 3), (-1, 4), (-2, 4), (-2, 5)]  # (y, x) representation
     tetri_z = [(-2, 3), (-2, 4), (-1, 4), (-1, 5)]  # (y, x) representation
 
+    tetri_i = {"init_pos": [(-1, 3), (-1, 4), (-1, 5), (-1, 6)],
+               "no_of_transpose": 4,
+               "trans_1_to_2": [(-1, 2), (0, 1), (1, 0), (2, -1)],
+               "trans_2_to_3": [(2, 1), (1, 0), (0, -1), (-2, -1)],
+               "trans_3_to_4": [(-2, 1), (-1, 0), (0, -1), (1, -2)],
+               "trans_4_to_1": [(1, 2), (1, 1), (-1, 0), (-2, -1)],
+               "name": "tetri_i"}
+    tetri_o = [(-1, 4), (-1, 5), (-2, 4), (-2, 5)]  # (y, x) representation
+    tetri_t = [(-1, 4), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
+    tetri_j = [(-1, 5), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
+    tetri_l = [(-1, 3), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
+    tetri_s = [(-1, 3), (-1, 4), (-2, 4), (-2, 5)]  # (y, x) representation
+    tetri_z = [(-2, 3), (-2, 4), (-1, 4), (-1, 5)]
+
     tetris_list = [tetri_i, tetri_o, tetri_t, tetri_j,
                    tetri_l, tetri_s, tetri_z]
+    tetris_list = [tetri_i]
     speed = .10
     old_time = 0
 
     game_data = {
         "game_grid": [],
         "next_tetri": None,
-        "current_tetri": None
+        "current_tetri": None,
+        "cur_transpose_pos": 1,
+        "current_tetri_instance": None
     }
+
+    def current_tetri_instance(self):
+        return self.game_data["current_tetri_instance"]
+
+    def get_cur_transpose_pos(self):
+        return self.game_data["cur_transpose_pos"]
+
+    def set_cur_transpose_pos(self, val):
+        self.game_data["cur_transpose_pos"] = val
+        return True
+
+    def reset_cur_transpose_pos(self):
+        self.game_data["cur_transpose_pos"] = 1
+        return True
+
+    def get_next_transpose_data(self):
+        tetri = self.current_tetri_instance()
+        cur_pos = self.get_cur_transpose_pos()
+        total_pos = tetri["no_of_transpose"]
+        next_pos = cur_pos + 1
+        if next_pos > total_pos:
+            next_pos = 1
+        trans_text = "trans_"+str(cur_pos)+"_to_"+str(next_pos)
+        data = tetri[trans_text]
+        return {"data": data, "next_pos": next_pos}
+
+
 
     def check_cell(self, y, x):
         if y < 0:
@@ -36,7 +80,10 @@ class Game:
             return False
 
     def get_next_tetri(self):
-        return random.choice(self.tetris_list)
+        tetri = random.choice(self.tetris_list)
+        self.reset_cur_transpose_pos()
+        self.game_data["current_tetri_instance"] = tetri
+        return list(tetri["init_pos"])
 
     def fill_cells(self, y, x):
         if y < 0:
@@ -130,9 +177,33 @@ class Game:
                 return False
         return self.move(no_fill, fill)
 
+    def transpose(self):
+        # TODO
+        no_fill = list(self.game_data["current_tetri"])
+        fill = []
+        transpose_data = self.get_next_transpose_data()
+        next_pos = transpose_data["next_pos"]
+        data = transpose_data["data"]
+
+        # Generating list of possible moves
+        for i in range(len(no_fill)):
+            no_fill_data = no_fill[i]
+            trans_data = data[i]
+            y = no_fill_data[0] + trans_data[0]
+            x = no_fill_data[1] + trans_data[1]
+            if y < Constants.grid_height and x < Constants.grid_width:
+                fill.append((y, x))
+            else:
+                return False
+        print no_fill, "NF"
+        print data, "Tr"
+        print fill, "FL"
+        if self.move(no_fill, fill):
+            self.set_cur_transpose_pos(next_pos)
+
     def key_event(self, event):
         if event.scancode == Cons.key_code_up:
-            pass
+            self.transpose()
         if event.scancode == Cons.key_code_left:
             self.move_left()
         if event.scancode == Cons.key_code_right:
