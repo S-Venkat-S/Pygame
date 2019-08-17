@@ -4,8 +4,8 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 from Constants import Constants
 from Game import Game
-pygame.init()
-pygame.mixer.init()
+# pygame.init()
+# pygame.mixer.init()
 screen_width = Constants.screen_width  # type: int
 screen_height = Constants.screen_height
 FPS = Constants.FPS

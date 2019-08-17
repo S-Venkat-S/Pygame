@@ -8,40 +8,69 @@ from common.Constants import Constants as Cons
 
 class Game:
 
-    tetri_i = [(-1, 3), (-1, 4), (-1, 5), (-1, 6)]  # (y, x) representation
-    tetri_o = [(-1, 4), (-1, 5), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_t = [(-1, 4), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_j = [(-1, 5), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_l = [(-1, 3), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_s = [(-1, 3), (-1, 4), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_z = [(-2, 3), (-2, 4), (-1, 4), (-1, 5)]  # (y, x) representation
-
+    #[(-1, 2), (0, 1), (1, 0), (2, -1)]
     tetri_i = {"init_pos": [(-1, 3), (-1, 4), (-1, 5), (-1, 6)],
                "no_of_transpose": 4,
-               "trans_1_to_2": [(-1, 2), (0, 1), (1, 0), (2, -1)],
-               "trans_2_to_3": [(2, 1), (1, 0), (0, -1), (-2, -1)],
-               "trans_3_to_4": [(-2, 1), (-1, 0), (0, -1), (1, -2)],
-               "trans_4_to_1": [(1, 2), (1, 1), (-1, 0), (-2, -1)],
+               "trans_0_to_1": [(-1, 2), (0, 1), (1, 0), (2, -1)],
+               "trans_1_to_2": [(2, -2), (1, -1), (0, 0), (-1, 1)],
+               "trans_2_to_3": [(-2, 1), (-1, 0), (0, -1), (1, -2)],
+               "trans_3_to_0": [(1, -1), (0, 0), (-1, 1), (-2, 2)],
                "name": "tetri_i"}
-    tetri_o = [(-1, 4), (-1, 5), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_t = [(-1, 4), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_j = [(-1, 5), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_l = [(-1, 3), (-2, 3), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_s = [(-1, 3), (-1, 4), (-2, 4), (-2, 5)]  # (y, x) representation
-    tetri_z = [(-2, 3), (-2, 4), (-1, 4), (-1, 5)]
+    tetri_o = {"init_pos": [(-1, 4), (-1, 5), (-2, 4), (-2, 5)],
+               "no_of_transpose": 4,
+               "trans_0_to_1": [(0, 0), (0, 0), (0, 0), (0, 0)],
+               "trans_1_to_2": [(0, 0), (0, 0), (0, 0), (0, 0)],
+               "trans_2_to_3": [(0, 0), (0, 0), (0, 0), (0, 0)],
+               "trans_3_to_0": [(0, 0), (0, 0), (0, 0), (0, 0)],
+               "name": "tetri_o"}
+    tetri_t = {"init_pos": [(-1, 3), (-1, 4), (-1, 5), (-2, 4)],
+               "no_of_transpose": 4,
+               "trans_0_to_1": [(-1, 1), (0, 0), (1, -1), (1, 1)],
+               "trans_1_to_2": [(1, -1), (0, 0), (-1, 1), (1, -1)],
+               "trans_2_to_3": [(-1, 1), (0, 0), (1, -1), (-1, -1)],
+               "trans_3_to_0": [(1, -1), (0, 0), (-1, 1), (-1, 1)],
+               "name": "tetri_t"}
+    tetri_j = {"init_pos": [(-2, 5), (-1, 3), (-1, 4), (-1, 5)],
+               "no_of_transpose": 4,
+               "trans_0_to_1": [(0, -1), (0, 1), (1, 0), (1, 0)],
+               "trans_1_to_2": [(1, 1), (0, 0), (-1, -1), (0, -2)],
+               "trans_2_to_3": [(1, -1), (0, 0), (-1, 1), (-2, 0)],
+               "trans_3_to_0": [(-2, 1), (0, -1), (1, 0), (1, 2)],
+               "name": "tetri_j"}
+    tetri_l = {"init_pos": [(-2, 3), (-1, 3), (-1, 4), (-1, 5)],
+               "no_of_transpose": 4,
+               "trans_0_to_1": [(0, 2), (-1, 1), (0, 0), (1, -1)],
+               "trans_1_to_2": [(2, 0), (1, 1), (0, 0), (-1, -1)],
+               "trans_2_to_3": [(0, -2), (1, -1), (0, 0), (-1, 1)],
+               "trans_3_to_0": [(-2, 0), (-1, -1), (0, 0), (1, 1)],
+               "name": "tetri_l"}
+    tetri_s = {"init_pos": [(-1, 3), (-1, 4), (-2, 4), (-2, 5)],
+               "no_of_transpose": 4,
+               "trans_0_to_1": [(-1, 1), (0, 0), (1, 1), (2, 0)],
+               "trans_1_to_2": [(1, 1), (0, 0), (1, -1), (0, -2)],
+               "trans_2_to_3": [(-1, -2), (0, -1), (-1, 0), (0, 1)],
+               "trans_3_to_0": [(1, 0), (0, 1), (-1, 0), (-2, 1)],
+               "name": "tetri_s"}
+    tetri_z = {"init_pos": [(-2, 3), (-2, 4), (-1, 4), (-1, 5)],
+               "no_of_transpose": 4,
+               "trans_0_to_1": [(0, 2), (1, 1), (0, 0), (1, -1)],
+               "trans_1_to_2": [(1, -2), (0, -1), (1, 0), (0, 1)],
+               "trans_2_to_3": [(-1, 1), (0, 0), (-1, -1), (0, -2)],
+               "trans_3_to_0": [(0, -1), (-1, 0), (0, 1), (-1, 2)],
+               "name": "tetri_z"}
 
     tetris_list = [tetri_i, tetri_o, tetri_t, tetri_j,
                    tetri_l, tetri_s, tetri_z]
-    tetris_list = [tetri_i]
-    speed = .10
+    speed = 0.50
     old_time = 0
 
     game_data = {
         "game_grid": [],
         "next_tetri": None,
         "current_tetri": None,
-        "cur_transpose_pos": 1,
-        "current_tetri_instance": None
+        "cur_transpose_pos": 0,
+        "current_tetri_instance": None,
+        "next_tetri_instance":None
     }
 
     def current_tetri_instance(self):
@@ -55,16 +84,16 @@ class Game:
         return True
 
     def reset_cur_transpose_pos(self):
-        self.game_data["cur_transpose_pos"] = 1
+        self.game_data["cur_transpose_pos"] = 0
         return True
 
     def get_next_transpose_data(self):
         tetri = self.current_tetri_instance()
         cur_pos = self.get_cur_transpose_pos()
-        total_pos = tetri["no_of_transpose"]
+        total_pos = tetri["no_of_transpose"] - 1
         next_pos = cur_pos + 1
         if next_pos > total_pos:
-            next_pos = 1
+            next_pos = 0
         trans_text = "trans_"+str(cur_pos)+"_to_"+str(next_pos)
         data = tetri[trans_text]
         return {"data": data, "next_pos": next_pos}
@@ -74,6 +103,8 @@ class Game:
     def check_cell(self, y, x):
         if y < 0:
             return False
+        if x < 0:
+            return True
         if self.game_data["game_grid"][y][x]:
             return True
         else:
@@ -82,8 +113,7 @@ class Game:
     def get_next_tetri(self):
         tetri = random.choice(self.tetris_list)
         self.reset_cur_transpose_pos()
-        self.game_data["current_tetri_instance"] = tetri
-        return list(tetri["init_pos"])
+        return list(tetri["init_pos"]), tetri
 
     def fill_cells(self, y, x):
         if y < 0:
@@ -223,8 +253,12 @@ class Game:
                 current_row.append(res)
             self.game_data["game_grid"].append(current_row)
         # self.game_data["game_grid"][3][5] = 1
-        self.game_data["current_tetri"] = self.get_next_tetri()
-        self.game_data["next_tetri"] = self.get_next_tetri()
+        cur_tetri_data = self.get_next_tetri()
+        next_tetri_data = self.get_next_tetri()
+        self.game_data["current_tetri"] = cur_tetri_data[0]
+        self.game_data["current_tetri_instance"] = cur_tetri_data[1]
+        self.game_data["next_tetri"] = next_tetri_data[0]
+        self.game_data["next_tetri_instance"] = next_tetri_data[1]
         return True
 
     def __init__(self, surface, mock=False):
@@ -246,7 +280,10 @@ class Game:
             self.old_time = c_time
             if not self.move_down():
                 self.game_data["current_tetri"] = self.game_data["next_tetri"]
-                self.game_data["next_tetri"] = self.get_next_tetri()
+                self.game_data["current_tetri_instance"] = self.game_data["next_tetri_instance"]
+                next_tetri_data = self.get_next_tetri()
+                self.game_data["next_tetri"] = next_tetri_data[0]
+                self.game_data["next_tetri_instance"] = next_tetri_data[1]
 
     def update_ui_state(self):
         for i in range(0, self.grid_h):
