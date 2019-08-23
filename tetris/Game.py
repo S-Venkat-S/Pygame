@@ -8,7 +8,6 @@ from common.Constants import Constants as Cons
 
 class Game:
 
-    #[(-1, 2), (0, 1), (1, 0), (2, -1)]
     tetri_i = {"init_pos": [(-1, 3), (-1, 4), (-1, 5), (-1, 6)],
                "no_of_transpose": 4,
                "trans_0_to_1": [(-1, 2), (0, 1), (1, 0), (2, -1)],
@@ -61,7 +60,7 @@ class Game:
 
     tetris_list = [tetri_i, tetri_o, tetri_t, tetri_j,
                    tetri_l, tetri_s, tetri_z]
-    speed = 0.50
+    speed = 0.20
     old_time = 0
 
     game_data = {
@@ -70,7 +69,7 @@ class Game:
         "current_tetri": None,
         "cur_transpose_pos": 0,
         "current_tetri_instance": None,
-        "next_tetri_instance":None
+        "next_tetri_instance": None
     }
 
     def current_tetri_instance(self):
@@ -97,8 +96,6 @@ class Game:
         trans_text = "trans_"+str(cur_pos)+"_to_"+str(next_pos)
         data = tetri[trans_text]
         return {"data": data, "next_pos": next_pos}
-
-
 
     def check_cell(self, y, x):
         if y < 0:
@@ -225,9 +222,6 @@ class Game:
                 fill.append((y, x))
             else:
                 return False
-        print no_fill, "NF"
-        print data, "Tr"
-        print fill, "FL"
         if self.move(no_fill, fill):
             self.set_cur_transpose_pos(next_pos)
 
@@ -274,11 +268,32 @@ class Game:
         self.fill = pygame.transform.scale(self.fill, (Constants.tile_size, Constants.tile_size))
         return
 
+    def get_empty_row(self, width):
+        out = []
+        for i in range(width):
+            out.append(0)
+        return out
+
+    def clear_row(self):
+        game_grid = self.game_data["game_grid"]
+        row_clear_count = 0
+        for i in range(len(game_grid)):
+            cur_grid = game_grid[i]
+            if sum(cur_grid) == Constants.grid_width:
+                del (game_grid[i])
+                empty_row = self.get_empty_row(Constants.grid_width)
+                game_grid.insert(0, empty_row)
+                row_clear_count += 1
+        if row_clear_count > 0:
+            return True
+        return False
+
     def update_state(self):
         c_time = time.time()
         if (c_time - self.old_time) > self.speed:
             self.old_time = c_time
             if not self.move_down():
+                self.clear_row()
                 self.game_data["current_tetri"] = self.game_data["next_tetri"]
                 self.game_data["current_tetri_instance"] = self.game_data["next_tetri_instance"]
                 next_tetri_data = self.get_next_tetri()
