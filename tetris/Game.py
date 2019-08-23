@@ -60,7 +60,8 @@ class Game:
 
     tetris_list = [tetri_i, tetri_o, tetri_t, tetri_j,
                    tetri_l, tetri_s, tetri_z]
-    speed = 0.20
+    speed = 0.35
+    score = 0
     old_time = 0
 
     game_data = {
@@ -205,7 +206,6 @@ class Game:
         return self.move(no_fill, fill)
 
     def transpose(self):
-        # TODO
         no_fill = list(self.game_data["current_tetri"])
         fill = []
         transpose_data = self.get_next_transpose_data()
@@ -285,6 +285,10 @@ class Game:
                 game_grid.insert(0, empty_row)
                 row_clear_count += 1
         if row_clear_count > 0:
+            cur_score = 0
+            for i in range(1, row_clear_count+1):
+                cur_score += i
+            self.score += cur_score
             return True
         return False
 
@@ -300,6 +304,41 @@ class Game:
                 self.game_data["next_tetri"] = next_tetri_data[0]
                 self.game_data["next_tetri_instance"] = next_tetri_data[1]
 
+    def update_info_screen(self):
+        # Divider between game and info screen.
+        info_start_x = Constants.screen_width + 2
+        info_start_y = 0
+        info_end_x = info_start_x
+        info_end_y = Constants.screen_height
+        black_color = (0, 0, 0)
+        pygame.draw.line(self.surface, black_color, (info_start_x, info_start_y),
+                         (info_end_x, info_end_y), 4)
+        score_font = pygame.font.Font(pygame.font.get_default_font(), 18)
+        score_text = "Score : " + str(self.score)
+        score_surface = score_font.render(score_text, False, black_color)
+        # Clearing the old score area, otherwise it will overlap.
+        # TODO: Fix for hard code values in width and height
+        self.surface.fill((255, 255, 255), (info_start_x+10, info_start_y+10, 100, 100))
+        self.surface.blit(score_surface, (info_start_x+10, info_start_y+10))
+
+        #Updating next tetri UI
+        next_tetri = self.game_data["next_tetri"]
+        offset_x = 8
+        offset_y = 8
+        preview_tetri = []
+        for i in next_tetri:
+            x = i[1] + offset_x
+            y = i[0] + offset_y
+            preview_tetri.append((y, x))
+        preview_slots = [(6, 11), (6, 12), (6, 13), (6, 14), (7, 11), (7, 12), (7, 13), (7, 14)]
+        for k in preview_slots:
+            j = k[1]
+            i = k[0]
+            if k in preview_tetri:
+                self.surface.blit(self.fill, (j * Constants.tile_size, i * Constants.tile_size))
+            else:
+                self.surface.blit(self.no_fill, (j * Constants.tile_size, i * Constants.tile_size))
+
     def update_ui_state(self):
         for i in range(0, self.grid_h):
             for j in range(0, self.grid_w):
@@ -308,6 +347,7 @@ class Game:
                     self.surface.blit(self.fill, (j * Constants.tile_size, i * Constants.tile_size))
                 else:
                     self.surface.blit(self.no_fill, (j * Constants.tile_size, i * Constants.tile_size))
+        self.update_info_screen()
 
     def update(self):
         self.update_state()
