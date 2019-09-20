@@ -234,7 +234,6 @@ class Game:
             self.move_right()
         if event.scancode == Cons.key_code_down:
             self.move_down()
-        pass
         return
 
     def init_data(self):
