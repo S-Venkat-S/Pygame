@@ -3,7 +3,7 @@ class Constants:
     def __init__(self):
         pass
 
-    tile_size = 50
+    tile_size = 30
     FPS = 30
     grid_width = 15
     grid_height = 15
