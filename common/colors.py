@@ -27,9 +27,9 @@ class Colors:
     class Snake:
 
         BLUE = (33, 150, 243)
-        PINK = (233, 30, 99)
-        GREEN = (0, 230, 118)
-        BLACK = (158, 158, 158)
+        PINK = (246, 0, 0)
+        GREEN = (53, 221, 2)
+        BLACK = (0, 0, 0)
 
         def __init__(self):
             pass

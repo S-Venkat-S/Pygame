@@ -1,7 +1,4 @@
 import pygame
-import time
-import random
-from common.Utils import Utils
 from Constants import Constants
 from common.Constants import Constants as Cons
 from common.colors import Colors as Color
@@ -10,14 +7,14 @@ from Snake import Snake
 
 class Game:
 
-    state_update_timer = 0
-    speed = 0.3*1000
-    running = True
-
     def __init__(self, surface):
         self.surface = surface
         self.snake = Snake(Constants.grid_width, Constants.grid_height, 0, self)
-        return
+        self.state_update_timer = 0
+        self.speed = 3 * 1000
+        self.running = True
+        self.data_instance = self.snake.data_instance
+
 
     # Gets the rect size to be filled according to the grid positions.
     # left = width, top = height
@@ -56,7 +53,12 @@ class Game:
                 cell = row[j]
                 cell_rect = self.get_cell_rect(j, i)
                 pygame.draw.rect(self.surface, self.snake.get_color_value(cell), cell_rect)
-        pass
+        self.update_score()
+
+    def update_score(self):
+        myfont = pygame.font.SysFont('tahoma', 14)
+        textsurface = myfont.render(str(self.snake.score), False, (0, 0, 0))
+        self.surface.blit(textsurface, (Constants.screen_width-40, 3))
 
     def update_ui(self):
         self.create_side_border_ui()
@@ -71,8 +73,19 @@ class Game:
         self.update_ui()
 
     def snake_crashed(self):
-        pygame.font.init()
+        myfont = pygame.font.SysFont('tahoma', 30)
         self.running = False
+        textsurface = myfont.render('Retry...', False, (0, 0, 0))
         pygame.draw.rect(self.surface, (255, 255, 255), (100, 100, 300, 300))
+        self.surface.blit(textsurface, (100+20, 100+20))
+        textsurface = myfont.render('(Y)es', False, (0, 0, 0))
+        self.surface.blit(textsurface, (150+20, 225))
+        textsurface = myfont.render('(N)o', False, (0, 0, 0))
+        self.surface.blit(textsurface, (250+20, 225))
 
-
+    def retry(self, event):
+        if event.key == 121:
+            self.snake = Snake(Constants.grid_width, Constants.grid_height, 0, self)
+            self.running = True
+        if event.key == 110:
+            pygame.quit()

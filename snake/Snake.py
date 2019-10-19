@@ -1,17 +1,10 @@
 from common.colors import Colors
 from common.Constants import Constants as Cons
 import random
+from Data_expose import Data_expose
 
 
 class Snake:
-    tile = []
-    grid_height = 0
-    grid_width = 0
-    last_direction = Cons.right
-    food_pos = None
-    # Snake positions in (x, y)
-    snake_grid = []
-    game_instance = None
 
     opposite_directions = {
         Cons.up: Cons.down,
@@ -21,13 +14,24 @@ class Snake:
     }
 
     def __init__(self, g_width, g_height, init_value, game_instance):
+        # Using for exposing data
+        # TODO: Need to find a better way to handle this.
+        self.data_instance = Data_expose(self)
+
         # 0 -> Non filled cell.
         # 1 -> Cell occupied by snake.
         # 8 -> Cell currently have food.
         # At later game the higher value means higher food.
+
         self.grid_height = g_height
         self.grid_width = g_width
         self.game_instance = game_instance
+        self.tile = []
+        self.last_direction = Cons.right
+        self.food_pos = None
+        self.score = 0
+        # Snake positions in (x, y)
+        self.snake_grid = []
         for i in range(g_height):
             row = []
             for j in range(g_width):
@@ -55,7 +59,6 @@ class Snake:
 
     def update_snake_in_grid(self):
         if self.is_collided(self.snake_grid[-1]):
-            print "Drive carefully!!!"
             self.game_instance.snake_crashed()
             return
         for i in self.snake_grid:
@@ -64,6 +67,7 @@ class Snake:
     def is_food_eaten(self, pos_vector):
         if pos_vector == self.food_pos:
             self.get_random_food()
+            self.score += 1
             return True
 
     def get_color_value(self, value):
@@ -101,6 +105,12 @@ class Snake:
             self.empty_grid_pos(self.snake_grid[0])
             del self.snake_grid[0]
 
+    def is_snake_bite_itself(self, pos_vector):
+        for i in self.snake_grid[0:-1]:
+            if i == pos_vector:
+                return True
+        return False
+
     def is_collided(self, pos_vector):
         if pos_vector[0] == self.grid_width:
             return True
@@ -110,6 +120,7 @@ class Snake:
             return True
         if pos_vector[1] == self.grid_height:
             return True
+        return self.is_snake_bite_itself(pos_vector)
 
     def move_up(self):
         snake_head = self.snake_grid[-1]
