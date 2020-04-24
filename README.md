@@ -18,15 +18,15 @@ Kind of space invader game in the old NES consoles and turned out into a Avenger
 
 # Tetris
 
-![Tetris](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Tetris Game")
+![Tetris](https://i.imgur.com/u73OqjW.png "Tetris Game")
 
 An implementation of old tetris game based on this [rotation](https://tetris.fandom.com/wiki/SRS?file=SRS-pieces.png) algorithm. No sounds.
 
 # 2048
 
-![2048](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "2048 Game")
+![2048](https://i.imgur.com/c6VarGq.png "2048 Game")
 
-The copy of the 2048 game. But no animation :(.
+Implementation of the 2048 game. But no animation :(.
 
 
 ## License

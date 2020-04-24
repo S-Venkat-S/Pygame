@@ -5,7 +5,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 from Player import Player
 from Constants import Constants
 pygame.init()
-pygame.mixer.init()
+try:
+    pygame.mixer.init()
+except:
+    print "No audio device found."
 screen_width = Constants.screen_width  # type: int
 screen_height = Constants.screen_height
 FPS = Constants.FPS
